@@ -60,9 +60,9 @@ class ResistenciaCalculo:
         """
 
         if g_M2 <= 0:
-            raise ValueError(':( g_M2 debe ser positivo.')
+            raise ValueError(':( El coeficiente parcial de seguridad debe ser mayor que cero.')
         if f_u <= 0:
-            raise ValueError(':( f_u debe ser positivo.')
+            raise ValueError(':( La resistencia última a tracción de la chapa debe ser mayor que cero')
 
         self.d = d
         self.A = A
@@ -128,7 +128,7 @@ class ResistenciaCalculo:
         """
 
         if d_0 <= 0:
-            raise ValueError(':( d_0 debe ser positivo.')
+            raise ValueError(':( El diámetro del taladro debe ser mayor que cero.')
 
         if posicion == 'edge':  # Tornillos alineados perpendicularmente a la dirección de la carga situados en las
             # alineaciones exteriores
@@ -163,7 +163,7 @@ class ResistenciaCalculo:
         """
 
         if d_0 <= 0:
-            raise ValueError(':( d_0 debe ser positivo.')
+            raise ValueError(':( El diámetro del taladro debe ser mayor que cero.')
 
         if posicion == 'end':  # Tornillos alineados en la dirección de la carga situados en la alineación final
             alfa_d: float = e_1 / (3 * d_0)
