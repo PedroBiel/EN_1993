@@ -190,9 +190,6 @@ class ResistenciaCalculo:
         :return: alfa_b; []
         """
 
-        if d_0 <= 0:
-            raise ValueError(':( d_0 debe ser positivo.')
-
         alfa_d: float = self.coeficiente_alfa_d(e_1, p_1, d_0, posicion)
         alfa_b: float = min(alfa_d, self.f_ub / self.f_u, 1.0)
 
