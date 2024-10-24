@@ -37,6 +37,29 @@ class ResistenciasDisenoTornillos:
         :param g_M2: [] Coeficiente parcial de seguridad para la resistencia de los tornillos según EN 1993-1-8:2005, tabla 2.1.
         """
 
+        # Validación de los parámetros numéricos
+        if d <= 0:
+            raise ValueError("El diámetro de la rosca (d) debe ser mayor que cero.")
+        if A_s <= 0:
+            raise ValueError("El área de la sección transversal (A_s) debe ser mayor que cero.")
+        if d_0 <= 0:
+            raise ValueError("El diámetro del taladro (d_0) debe ser mayor que cero.")
+        if t <= 0:
+            raise ValueError("El espesor de la chapa (t) debe ser mayor que cero.")
+        if f_u <= 0:
+            raise ValueError("La resistencia última a tracción (f_u) debe ser mayor que cero.")
+        if g_M2 <= 0:
+            raise ValueError("El coeficiente parcial de seguridad (g_M2) debe ser mayor que cero.")
+
+        # Validación del formato del grado (debe ser algo como '4.6', '8.8', '10.9', etc.)
+        try:
+            n1, n2 = map(int, grado.split('.'))
+            if n1 <= 0 or n2 <= 0:
+                raise ValueError("El grado del tornillo debe ser válido, por ejemplo '4.6' o '8.8'.")
+        except ValueError:
+            raise ValueError("Formato del grado inválido. Debe ser un número en formato 'X.X'.")
+
+        # Asignación de atributos
         self.d = d
         self.A_s = A_s
         self.grado = grado
@@ -177,9 +200,13 @@ class ResistenciasDisenoTornillos:
         :return f_yb; [N/mm²]
         """
 
-        n1: int = int(self.grado.split('.', 1)[0])
-        n2: int = int(self.grado.split('.', 1)[2])
-        f_yb: int = n1 * n2 * 10
+        try:
+            # Divide el grado en dos partes, por ejemplo, "8.8" -> [8, 8]
+            n1, n2 = map(int, self.grado.split('.'))
+            f_yb = n1 * n2 * 10
+        except (ValueError, IndexError):
+            # Si el formato es incorrecto, lanzamos una excepción con un mensaje adecuado
+            raise ValueError(f"Formato de grado inválido: {self.grado}. Debe ser algo como 'X.X' (por ejemplo, '8.8').")
 
         return f_yb
 
