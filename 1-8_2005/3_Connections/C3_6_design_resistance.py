@@ -59,6 +59,11 @@ class ResistenciaCalculo:
         :param g_M2: [] Coeficiente parcial de seguridad para la resistencia de los tornillos
         """
 
+        if g_M2 <= 0:
+            raise ValueError(':( g_M2 debe ser positivo.')
+        if f_u <= 0:
+            raise ValueError(':( f_u debe ser positivo.')
+
         self.d = d
         self.A = A
         self.A_s = A_s
@@ -122,17 +127,23 @@ class ResistenciaCalculo:
         :return: k_1; []
         """
 
-        if posicion == 'edge':  # Tornillos alineados perpendicularmente a la dirección de la carga situados en las alineaciones exteriores
+        if d_0 <= 0:
+            raise ValueError(':( d_0 debe ser positivo.')
+
+        if posicion == 'edge':  # Tornillos alineados perpendicularmente a la dirección de la carga situados en las
+            # alineaciones exteriores
             k_11: float = 2.8 * e_2 / d_0 - 1.7
             k_12: float = 1.4 * p_2 / d_0 - 1.7
             k_13: float = 2.5
             k_1: float = min(k_11, k_12, k_13)
-        elif posicion == 'inner':  # TTornillos alineados perpendicularmente a la dirección de la carga situados en las alineaciones interiores
+        elif posicion == 'inner':  # Tornillos alineados perpendicularmente a la dirección de la carga situados en
+            # las alineaciones interiores
             k_11: float = 1.4 * p_2 / d_0 - 1.7
             k_12: float = 2.5
             k_1: float = min(k_11, k_12)
         else:
-            print('Algo ha ido mal :(')
+            # print('Algo ha ido mal :(')
+            raise ValueError(':( Posición no válida. Debe ser "edge" o "inner".')
 
         return k_1
 
@@ -150,6 +161,9 @@ class ResistenciaCalculo:
 
         :return: alfa_d; []
         """
+
+        if d_0 <= 0:
+            raise ValueError(':( d_0 debe ser positivo.')
 
         if posicion == 'end':  # Tornillos alineados en la dirección de la carga situados en la alineación final
             alfa_d: float = e_1 / (3 * d_0)
@@ -175,6 +189,9 @@ class ResistenciaCalculo:
 
         :return: alfa_b; []
         """
+
+        if d_0 <= 0:
+            raise ValueError(':( d_0 debe ser positivo.')
 
         alfa_d: float = self.coeficiente_alfa_d(e_1, p_1, d_0, posicion)
         alfa_b: float = min(alfa_d, self.f_ub / self.f_u, 1.0)
@@ -261,6 +278,11 @@ class ResistenciaCalculo:
 
         :return: F_bRd; [N]
         """
+
+        if posicion_k1 not in ['edge', 'inner']:
+            raise ValueError('Posición no válida. Debe ser "end" o "inner".')
+        if posicion_ad not in ['end', 'inner']:
+            raise ValueError('Posición no válida. Debe ser "edge" o "inner".')
 
         F_bRd: float = self.capacidad_resistente_F_bRd(e_1, e_2, p_1, p_2, d_0, posicion_k1, posicion_ad)
         F_bRd_slotted: float = 0.6 * F_bRd
