@@ -34,6 +34,11 @@ class DisposicionTaladros:
         :param t: [mm] Espesor de la chapa
         """
 
+        if d_0 <= 0:
+            raise ValueError(":( El diámetro del taladro debe ser mayor que cero.")
+        if t <= 0:
+            raise ValueError(":( El espesor de la chapa debe ser mayor que cero.")
+
         self.d_0 = d_0
         self.t = t
 
